@@ -1,4 +1,4 @@
-# Bargs v1.1
+# Bargs v1.1.1
 
 Bargs is an Argument parsing Module for Bash      
 similar to yargs for nodejs or argparse for python
@@ -80,7 +80,7 @@ some Examples for runtext:
 ```
      #\
    #==#\    (*)       ^                                 _      _    _
- #=====#\  +---+  /\ /#\  ^         #+++----+_+_+++--__===+++++ ###### #
+ #=====#\  +---+  /\ /#\  ^  2025   #+++----+_+_+++--__===+++++ ###### #
 ## # i10[r1i1r1i3r1i7r1i10l4d1]r3i12.r1d3.i3.i5.d6.d2.i11.l1d13.r1d8. # ##
 ############################################################################
  ## ## ## ## ## ## ## ## ##  ▛▀▖ ▞▀▖ ▛▀▖ ▞▀▖ ▞▀▖ ## #   # #   # #   # #   #
@@ -91,5 +91,6 @@ some Examples for runtext:
 ```
 
 #### Changelog
-- 1.0: ??/??/?? completed functionality, archived for a year or so
-- 1.1: 07/30/25 found in archive, added Documentation, made Public
+- 1.0.0: ?? wrote basic functionality, archived for a year or two
+- 1.1.0: 07/30/25 found in archive, added Documentation, Made Public
+- 1.1.1: 07/31/25 added an example script, added Documentation for script_name/script_description/script_usage, changed help menu a little bit

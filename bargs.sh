@@ -1,10 +1,10 @@
 #!/bin/bash
 ###############################################################################
 ##########################################
-# ABOUT ####        ▛▀▖            
-###########         ▙▄▘▝▀▖▙▀▖▞▀▌▞▀▘
-#            v1.1   ▌ ▌▞▀▌▌  ▚▄▌▝▀▖
-#                   ▀▀ ▝▀▘▘  ▗▄▘▀▀ 
+# ABOUT ####          ▛▀▖            
+###########           ▙▄▘▝▀▖▙▀▖▞▀▌▞▀▘
+#            v1.1.1   ▌ ▌▞▀▌▌  ▚▄▌▝▀▖
+#                     ▀▀ ▝▀▘▘  ▗▄▘▀▀ 
 # Bargs is an Argument parsing Module for Bash Scripts
 # similar to yargs for nodejs or argparse for python
 ##################################################
@@ -38,6 +38,11 @@
 # - positionals (defined or not) are stored in the "$POSARGS" array
 # - help is a string that is displayed in the help menu
 # - runtext is a string that will be executed if the argument is present
+#
+######## Help Menu
+# - Naming your Script: define $script_name before sourcing
+# - Adding a Description: define $script_description before sourcing
+# - Adding a Usage Example: define $script_usage before sourcing
 #
 ######## Naming/Triggering
 # - shorthands and names do not use leading dashes when they are defined
@@ -74,9 +79,10 @@ args=( "$@" )
 
 ### Help Menu
 function showhelp() {
-	echo "${script_example:-${script_name:-$0}}"
-	echo "-----------------------------------"
+	echo "${script_name:-$0}"
 	echo "${script_description:-"Define a Description"}"
+	echo "-----------------------------------"
+	[ "${script_usage}" ] && echo "Usage: ${script_usage}" && \
 	echo "-----------------------------------"
 	for x in $(seq 1 ${#myargs[@]});do
 			argument="${myargs[$((x-1))]}"
@@ -85,16 +91,16 @@ function showhelp() {
 			arghelp="$(echo "$argument"|cut -d '|' -f 3)"
 						d='-'
 			argtype="$(
-					if [ ! "$argshort" ];then
-						echo "positional"
-					elif [[ "$(echo "$argument"|cut -d '|' -f 4-)" =~ '$val' ]];then
-						echo "value"
-					else
-						echo "flag"
-					fi
-				)"
+				if [ ! "$argshort" ];then
+					echo "positional"
+				elif [[ "$(echo "$argument"|cut -d '|' -f 4-)" =~ '$val' ]];then
+					echo "value holder"
+				else
+					echo "flag/switch"
+				fi
+			)"
 			[ "$argtype" == 'positional' ] && unset d
-			echo "${d}$argshort ${d}${d}$argname	($argtype)	$arghelp"
+			echo "${d}$argshort ${d}${d}$argname			($argtype)		$arghelp"
 	done|sort -h
 	exit
 }
@@ -140,6 +146,9 @@ while [ $x -lt ${#args[@]} ];do
 				found=yes
 				#echo "Found: $arg Type: $argtype"
 
+				# execute runtext, exit on error
+				source <(echo "${argcmd}") || ( r=$? && echo "$r $argname| $argcmd" && exit $r ) || exit $?
+
 				# set $ARGS_argname value
 				if [ "$argtype" == 'positional' ] || [ "$argtype" == 'value' ];then
 					export ARGS_$argname="$val"
@@ -147,8 +156,6 @@ while [ $x -lt ${#args[@]} ];do
 					# Switches/Flags are Set to True under $ARGS_argname
 					export ARGS_$argname="True"
 				fi
-				# execute runtext, exit on error
-				source <(echo "${argcmd}") || ( r=$? && echo "$r $argname| $argcmd" && exit $r ) || exit $?
 			fi
 		done
 		[ ! "$found" ] && echo "Unknown Argument: $arg" && exit 1
@@ -177,7 +184,7 @@ for i in $(seq 1 ${#myargs[@]});do
 		arghelp="$(echo "$argument"|cut -d '|' -f 3)"
 		argcmd="$(echo "$argument"|cut -d '|' -f 4-)"
 		val="${POSARGS[$p]}"
-		[ ! "$val" ] && echo "Argument Required: $argname: $arghelp" && exit 1
+		[ ! "$val" ] && echo "Positional Argument Required: $argname" && exit 1
 		export ARGS_$argname="$val"
 		# execute runtext, exit on error
 		source <(echo "${argcmd}") || ( r=$? && echo "$r: $argname: $argcmd" && exit $r ) || exit $?
@@ -187,7 +194,7 @@ done
 
      #\
    #==#\    (*)       ^                                 _      _    _
- #=====#\  +---+  /\ /#\  ^         #+++----+_+_+++--__===+++++ ###### #
+ #=====#\  +---+  /\ /#\  ^  2025   #+++----+_+_+++--__===+++++ ###### #
 ## # i10[r1i1r1i3r1i7r1i10l4d1]r3i12.r1d3.i3.i5.d6.d2.i11.l1d13.r1d8. # ##
 ############################################################################
  ## ## ## ## ## ## ## ## ##  ▛▀▖ ▞▀▖ ▛▀▖ ▞▀▖ ▞▀▖ ## #   # #   # #   # #   #
