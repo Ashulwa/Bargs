@@ -41,6 +41,11 @@ value args:    'shorthand|argname|help|runtext "$val"'
 - help is a string that is displayed in the help menu
 - runtext is a string that will be executed if the argument is present
 
+### Help Menu
+- Naming your Script: define $script_name before sourcing
+- Adding a Description: define $script_description before sourcing
+- Adding a Usage Example: define $script_usage before sourcing
+
 ### Naming/Triggering
 - shorthands and names do not use leading dashes when they are defined
 - the shorthand form is triggered on the commandline by: -shorthand
